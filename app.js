@@ -59,7 +59,7 @@ async function smartParse(text){
         });
         const data=await r.json();
 
-        const jsonText=data.result.match(/\{[/s/S]*\}/)[0];
+        const jsonText=data.result.match(/\{[\s\S]*\}/)[0];
         const parsed=JSON.parse(jsonText);
 
         const okCategory=["Food","Transport","Other"].includes(parsed.category);
