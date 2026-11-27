@@ -10,7 +10,8 @@
     <body>
        <header class="app-header">
         <img src="images/MainLogo.png" alt="Budgie" class="logo">
-        <h1>Allowance Tracker</h1>
+        <h1></h1>
+        <p class="tagline">Make your allowance last the whole month!</p>
        </header>
 
         <section id="setup-screen">
@@ -27,12 +28,15 @@
         </section>
 
         <section id="dashboard" class="hidden">
-            <h2>Your Dashboard</h2>
-            <p>Monthly allowance: PKR <span id="show-allowance"></span></p>
-            <p>Arrives on day: <span id="show-payday"></span></p>
-            <p>Spent so far: PKR <span id="show-spent">0</span></p>
-            <p>Money left: PKR <span id="show-left"></span></p>
-            <p id="prediction"></p>
+            <div class="hero">
+                <p class="hero-label">Money left</p>
+                <p class="hero-amount" id="show-left"></p>
+                <div class="progress"><div id="progress-fill"></div></div>
+                <p class="hero-sub">Spent PKR <span id="show-spent">0</span> of PKR <span id="show-allowance"></span></p>
+                <span id="status-pill" class="pill"></span>
+                <p id="prediction"></p>
+            </div>
+            <p>Allowance arrives on day <span id="show-payday"></span></p>
             <h3>Add Expense</h3>
             <form id="expense-form">
                 <input type="number" id="exp-amount" min="1" placeholder="Amount" required>

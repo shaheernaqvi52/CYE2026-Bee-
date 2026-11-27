@@ -95,13 +95,92 @@ button{
     font-weight:600;
 }
 .logo{
-    height: 48px;
+    height: 80px;
+    display:block;
+    margin:0 auto;
 }
 .app-header{
-    display:flex;
-    align-items: center;
-    gap:12px;
+    text-align: center;
+    margin-bottom:16px;
 }
-.app-header h1{
+.tagline{
+    margin:-8px 0 0;
+    color: var(--sage);
+}
+
+.hero{
+    background:var(--forest);
+    color:var(--cream);
+    border-radius:16px;
+    padding:20px;
+    margin-bottom:20px ;
+}
+
+.hero p {
     margin:0;
+}
+.hero .hero-amount{
+    margin:6px 0 16px;
+}
+.hero-label{
+    opacity:0.8;
+}
+
+.hero-amount{
+    font-family:"Plus Jakarta Sans",sans-serif;
+    font-size:2rem;
+    font-weight:700;
+    margin:4px 0 12px;
+}
+
+.hero .over{
+    color:var(--peach);
+}
+.progress{
+    height:10px;
+    background:rgba(245,242,233,0.25);
+    border-radius:999px;
+    overflow:hidden;
+    margin-bottom:10px;
+}
+
+#progress-fill{
+    height:100%;
+    width:0;
+    background:var(--peach);
+    border-radius:999px;
+    transition:width 0.4s;
+}
+.hero-sub {
+    margin-top:8px;
+    font-size:0.9rem;
+    opacity:0.8;
+}
+.hero .hero-sub{
+    margin-top:0;
+    margin-bottom:16px;
+}
+
+.pill{
+    display:inline-block;
+    margin:0 0 12px;
+    padding: 4px 12px;
+    border-radius:999px;
+    font-size:0.85rem;
+    font-weight:600;
+}
+.pill.good{
+    background:var(--mint);
+    color:var(--forest);
+}
+.pill.warn{
+    background:var(--peach); 
+    color:var(--forest);
+}
+.pill.bad{
+    background:var(--danger);
+    color:white;
+}
+#prediction{
+    line-height:1.5;
 }

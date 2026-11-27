@@ -24,6 +24,12 @@ demoBtn.addEventListener("click",function(){
     showDashboard(settings);
 });
 
+function setPill(text,type){
+    const pill=document.getElementById("status-pill");
+    pill.textContent=text;
+    pill.className="pill "+type;
+} 
+
 function showDashboard(settings){
     document.getElementById("show-allowance").textContent=settings.allowance;
     document.getElementById("show-payday").textContent=settings.payday;
@@ -55,15 +61,22 @@ function renderExpenses(){
 
     const settings=JSON.parse(localStorage.getItem("settings"));
     document.getElementById("show-spent").textContent=spent;
-    if ((settings.allowance-spent)>=0){
-        document.getElementById("show-left").classList.remove("over");
-        document.getElementById("show-left").textContent=settings.allowance-spent;
+    const left=settings.allowance-spent;
+    const leftEl=document.getElementById("show-left");
+
+    if(left>=0){
+        leftEl.classList.remove("over");
+        leftEl.textContent="PKR "+left;
+        document.getElementById("progress-fill").style.background="var(--peach)"
+    }else{
+        leftEl.classList.add("over");
+        leftEl.textContent="Over by PKR "+Math.abs(left);
+        document.getElementById("progress-fill").style.background="var(--danger)"
     }
-    else{
-        document.getElementById("show-left").classList.add("over");
-        document.getElementById("show-left").textContent="Over by PKR "+Math.abs(settings.allowance-spent);
-    }
-    renderPrediction(spent,settings.allowance-spent,settings);
+    const percent=Math.min((spent/settings.allowance)*100,100);
+    document.getElementById("progress-fill").style.width=percent+"%"
+
+    renderPrediction(spent,left,settings);
 }
 
 function renderPrediction(spent,left,settings){
@@ -71,14 +84,17 @@ function renderPrediction(spent,left,settings){
 
         if (spent===0){
             box.textContent="Add an expense to see your prediction.";
+            setPill("Just getting started","good");
             return;
         }
         if (left===0){
             box.textContent="You've used up your allowance for this allowance cycle.";
+            setPill("Allowance used up","bad");
             return;
         }
         if(left<0){
             box.textContent="You've gone PKR "+Math.abs(left) + " over your allowance this cycle.";
+            setPill("Over Budget","bad")
             return;
         }
 
@@ -101,11 +117,13 @@ function renderPrediction(spent,left,settings){
 
         if (daysItLasts>=daysToPayday){
             box.textContent="You're on Track! Your money will last until your next allowance. You can spend: PKR "+safeDaily+ " each day.";
+            setPill("On track","good");
         } else{
             const runOut=new Date(today);
             runOut.setDate(today.getDate()+daysItLasts);
             const dateText=runOut.toLocaleDateString("en-GB",{day:"numeric",month:"long"});
             box.textContent="At this pace you'll run out on " +dateText+", "+(daysToPayday-daysItLasts)+" days before your next allowance. "+"Spend under PKR "+safeDaily+" per day to make it last.";
+            setPill("Running low","warn");
         
         }
     }
