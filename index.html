@@ -26,6 +26,7 @@
             <p>Arrives on day: <span id="show-payday"></span></p>
             <p>Spent so far: PKR <span id="show-spent">0</span></p>
             <p>Money left: PKR <span id="show-left"></span></p>
+            <p id="prediction"></p>
             <h3>Add Expense</h3>
             <form id="expense-form">
                 <input type="number" id="exp-amount" placeholder="Amount" required>
@@ -38,7 +39,7 @@
                 <button type="submit">Add</button>
             </form>
             <h3>Recent Expenses</h3>
-            <ul id="expense-list"><button id="delete-exp">X</button></ul>
+            <ul id="expense-list"></ul>
             <button id="reset-btn">Reset</button>
         </section>
 
