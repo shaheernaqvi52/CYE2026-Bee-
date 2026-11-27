@@ -4,6 +4,9 @@ const dashboard=document.getElementById("dashboard");
 const resetBtn=document.getElementById("reset-btn");
 const expenseForm=document.getElementById("expense-form");
 const demoBtn=document.getElementById("demo-btn");
+const micBtn = document.getElementById("mic-btn");
+const voiceStatus=document.getElementById("voice-status");
+const SpeechRecognition=window.SpeechRecognition || window.webkitSpeechRecognition;
 let expenses=JSON.parse(localStorage.getItem("expenses")) || [];
 
 demoBtn.addEventListener("click",function(){
@@ -164,3 +167,23 @@ resetBtn.addEventListener("click",function(){
     localStorage.removeItem("settings");
     location.reload();
 });
+
+if(!SpeechRecognition){
+    micBtn.classList.add("hidden");
+}else{
+    const recognition = new SpeechRecognition();
+    recognition.lang="en-US";
+
+    micBtn.addEventListener("click",function(){
+        voiceStatus.textContent="Listening...";
+        recognition.start();
+    });
+
+    recognition.addEventListener("result",function(event){
+        const transcript=event.results[0][0].transcript;
+        voiceStatus.textContent='Heard: "'+transcript+'"';
+    });
+    recognition.addEventListener("error",function(){
+        voiceStatus.textContent="Couldn't hear that. Try again or type it.";
+    });
+}
