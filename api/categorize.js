@@ -25,6 +25,11 @@ module.exports=async function(req,res){
         });
 
         const data=await response.json();
+        if(!response.ok || !Array.isArray(data.choices) || !data.choices[0]){
+            return res.status(response.ok ? 500 :response.status).json({
+                error:(data.error && data.error.message) || "Unexpected Groq response"
+            });
+        }
         res.status(200).json({result: data.choices[0].message.content});
     }   catch(e){
         console.error("categorize error:",e);
