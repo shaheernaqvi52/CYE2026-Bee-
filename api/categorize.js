@@ -27,6 +27,7 @@ module.exports=async function(req,res){
         const data=await response.json();
         res.status(200).json({result: data.choices[0].message.content});
     }   catch(e){
-        res.status(500).json({error:"failed"});
+        console.error("categorize error:",e);
+        res.status(500).json({error:e.message || "failed"});
     }
 };
