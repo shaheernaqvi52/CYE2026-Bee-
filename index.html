@@ -24,7 +24,21 @@
             <h2>Your Dashboard</h2>
             <p>Monthly allowance: PKR <span id="show-allowance"></span></p>
             <p>Arrives on day: <span id="show-payday"></span></p>
-
+            <p>Spent so far: PKR <span id="show-spent">0</span></p>
+            <p>Money left: PKR <span id="show-left"></span></p>
+            <h3>Add Expense</h3>
+            <form id="expense-form">
+                <input type="number" id="exp-amount" placeholder="Amount" required>
+                <select id="exp-category">
+                    <option>Food</option>
+                    <option>Transport</option>
+                    <option>Other</option>
+                </select>
+                <input type="text" id="exp-note" placeholder="Note (Optional)">
+                <button type="submit">Add</button>
+            </form>
+            <h3>Recent Expenses</h3>
+            <ul id="expense-list"><button id="delete-exp">X</button></ul>
             <button id="reset-btn">Reset</button>
         </section>
 
