@@ -3,7 +3,26 @@ const setupScreen=document.getElementById("setup-screen");
 const dashboard=document.getElementById("dashboard");
 const resetBtn=document.getElementById("reset-btn");
 const expenseForm=document.getElementById("expense-form");
+const demoBtn=document.getElementById("demo-btn");
 let expenses=JSON.parse(localStorage.getItem("expenses")) || [];
+
+demoBtn.addEventListener("click",function(){
+    const tenDaysAgo=new Date();
+    tenDaysAgo.setDate(tenDaysAgo.getDate()-10);
+    const payday=Math.min(tenDaysAgo.getDate(),28);
+
+    const settings={allowance:15000, payday: payday};
+    expenses=[
+        {amount:3500,category:"Food",note:"Groceries"},
+        {amount:2250,category:"Transport",note:"Bus ticket home"},
+        {amount:2000,category:"Other",note:"Registration fee for an event"},
+        {amount:1250,category:"Food",note:"Food from restaurant"}
+    ];
+
+    localStorage.setItem("settings",JSON.stringify(settings));
+    localStorage.setItem("expenses",JSON.stringify(expenses));
+    showDashboard(settings);
+});
 
 function showDashboard(settings){
     document.getElementById("show-allowance").textContent=settings.allowance;

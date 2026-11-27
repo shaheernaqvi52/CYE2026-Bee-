@@ -18,6 +18,7 @@
 
                 <button type="submit">Start Tracking</button>
             </form>
+            <button id="demo-btn">Try Demo</button>
         </section>
 
         <section id="dashboard" class="hidden">
@@ -29,7 +30,7 @@
             <p id="prediction"></p>
             <h3>Add Expense</h3>
             <form id="expense-form">
-                <input type="number" id="exp-amount" placeholder="Amount" required>
+                <input type="number" id="exp-amount" min="1" placeholder="Amount" required>
                 <select id="exp-category">
                     <option>Food</option>
                     <option>Transport</option>
