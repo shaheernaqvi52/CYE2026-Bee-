@@ -206,7 +206,7 @@ if(!SpeechRecognition){
         const transcript=event.results[0][0].transcript;
         const parsed=parseExpense(transcript);
         if (parsed.amount !==null){
-            document.getElementById("exp=amount").value=parsed.amount;
+            document.getElementById("exp-amount").value=parsed.amount;
         }
         document.getElementById("exp-category").value=parsed.category;
         document.getElementById("exp-note").value=parsed.note;
