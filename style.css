@@ -184,3 +184,15 @@ button{
 #prediction{
     line-height:1.5;
 }
+
+.voice-controls {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.voice-controls select {
+    width: auto;
+    margin-bottom: 0;
+}
