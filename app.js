@@ -46,9 +46,33 @@ function parseExpense(text){
         }
     }
     
-    const note=text.replace(/\d+/,"").replace(/\b(rupees|rs|pkr)\b/gi,"").trim();
+    const note=text.replace(/\d+/,"").replace(/\b(rupees|rs|pkr)\b/gi,"").replace(/[.,!?]/g,"").replace(/\s+/g," ").trim();
     return{amount:amount, category:category,note:note};
 }
+
+async function smartParse(text){
+    try{
+        const r=await fetch("/api/categorize",{
+            method:"POST",
+            headers:{"content-type":"application/json"},
+            body:JSON.stringify({text:text})
+        });
+        const data=await r.json();
+
+        const jsonText=data.result.match(/\{[/s/S]*\}/)[0];
+        const parsed=JSON.parse(jsonText);
+
+        const okCategory=["Food","Transport","Other"].includes(parsed.category);
+        const okAmount=parsed.amount===null || typeof parsed.amount==="number";
+        if (!okCategory || !okAmount){
+            throw new Error("bad answer");
+        }
+        return parsed;
+    }  catch (e){
+        return parseExpense(text);
+    }
+}
+
 
 function setPill(text,type){
     const pill=document.getElementById("status-pill");
@@ -202,9 +226,10 @@ if(!SpeechRecognition){
         recognition.start();
     });
 
-    recognition.addEventListener("result",function(event){
+    recognition.addEventListener("result",async function(event){
         const transcript=event.results[0][0].transcript;
-        const parsed=parseExpense(transcript);
+        voiceStatus.textContent='Heard: "'+transcript+'". Working it out...';
+        const parsed=await smartParse(transcript);
         if (parsed.amount !==null){
             document.getElementById("exp-amount").value=parsed.amount;
         }
