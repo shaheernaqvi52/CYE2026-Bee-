@@ -8,8 +8,8 @@ module.exports=async function(req,res){
                 "authorization":"Bearer "+process.env.GROQ_API_KEY
             },
             body:JSON.stringify({
-                model:"llama-3.3-70b-versatile",
-                max_tokens:100,
+                model:"openai/gpt-oss-20b",
+                max_tokens:250,
                 temperature:0,
                 messages:[{
                     role:"user",
