@@ -7,6 +7,7 @@ const demoBtn=document.getElementById("demo-btn");
 const micBtn = document.getElementById("mic-btn");
 const voiceStatus=document.getElementById("voice-status");
 const SpeechRecognition=window.SpeechRecognition || window.webkitSpeechRecognition;
+const langSelect=document.getElementById("voice-lang");
 let expenses=JSON.parse(localStorage.getItem("expenses")) || [];
 
 demoBtn.addEventListener("click",function(){
@@ -27,13 +28,70 @@ demoBtn.addEventListener("click",function(){
     showDashboard(settings);
 });
 
+function normalizeUrduDigits(str){
+    const urduDigits="۰۱۲۳۴۵۶۷۸۹";
+    return str.replace(/[۰-۹]/g, function (d){
+        return String(urduDigits.indexOf(d));
+    });
+}
+
+
 function parseExpense(text){
+    const normalized=normalizeUrduDigits(text);
     const lower=text.toLowerCase().replace(/,/g,"");
     const match=lower.match(/\d+/);
     const amount=match ? Number(match[0]):null;
     const keywords={
-        Food:["lunch","dinner","breakfast","food","pizza","burger","chai","tea","coffee","snack","groceries"],
-        Transport:["uber","indrive","yango","rickshaw","bus","taxi","fuel","petrol","ride"]
+        Food:["lunch", "dinner", "breakfast", "brunch", "supper", "meal", "food",
+            "snack", "snacks", "canteen", "cafe", "cafeteria", "dhaba", "restaurant",
+            "takeaway", "delivery", "foodpanda", "groceries", "grocery", "ration",
+
+            // Pakistani / Desi dishes & street food
+            "biryani", "pulao", "karahi", "handi", "nihari", "haleem", "paya",
+            "korma", "qorma", "daal", "dal", "sabzi", "bhindi", "aloo", "palak",
+            "paneer", "tikka", "boti", "kabab", "kebab", "seekh", "chapli",
+            "sajji", "chargha", "broast", "shawarma", "roll", "paratha roll",
+            "paratha", "anda paratha", "halwa puri", "puri", "chanay", "chana",
+            "naan", "roti", "kulcha", "samosa", "pakora", "chaat", "dahi bhalla",
+            "gol gappay", "pani puri", "bun kabab", "anday wala burger",
+
+            // Fast food & baked goods
+            "pizza", "burger", "zinger", "fries", "nuggets", "wings", "sandwich",
+            "wrap", "pasta", "macaroni", "noodles", "chow mein", "soup", "momos",
+            "dumplings", "steak", "taco", "loaded fries", "sub", "patty", "patties",
+            "bakery", "cake", "pastry", "donut", "doughnut", "brownie", "cookie",
+            "biscuit", "biscuits", "chips", "nimko", "chocolate", "mithai", "jalebi",
+            "gulab jamun", "rasmalai", "kheer", "ice cream", "kulfi", "falooda",
+
+            // Drinks & dairy
+            "chai", "tea", "doodh patti", "karak", "coffee", "latte", "cappuccino",
+            "espresso", "cold coffee", "juice", "shake", "milkshake", "smoothie",
+            "lassi", "limca", "soda", "coke", "pepsi", "sprite", "7up", "water",
+            "mineral water", "milk", "doodh", "yogurt", "dahi", "eggs", "anday", "bread",
+
+            //urdu
+            "کھانا", "بریانی", "کڑاہی", "چائے", "ناشتہ", "روٹی", "نان", "سموسہ", "پراٹھا", "شوارما", "پیزا", "برگر"
+        ],
+        
+        Transport:[// Ride-hailing & delivery riders
+            "uber", "indrive", "indriver", "yango", "careem", "bykea", "ride",
+            "cab", "taxi", "captain", "driver", "fare", "kiraya",
+
+            // Local & public transit
+            "rickshaw", "auto", "chingchi", "qinqi", "bus", "metro", "metro bus",
+            "speedo", "orange line", "orange train", "train", "daewoo", "faisal movers",
+            "van", "wagon", "hiace", "coaster", "shuttle", "university bus", "point",
+            "ticket", "pass", "metro card", "top up", "topup", "commute", "travel",
+
+            // Personal vehicle, fuel & maintenance
+            "fuel", "petrol", "diesel", "cng", "gas", "tank", "refuel", "pump",
+            "pso", "shell", "total", "attock", "hascol", "bike", "motorbike",
+            "motorcycle", "car", "gaari", "parking", "toll", "motorway", "challan",
+            "puncture", "tyre", "tire", "oil change", "tuning", "mechanic", "service",
+
+            //urdu
+            "رکشہ", "بس", "میٹرو", "ٹیکسی", "پیٹرول", "بائیک", "کرایہ", "سفر"
+        ]
     };
 
     let category="Other";
@@ -46,7 +104,13 @@ function parseExpense(text){
         }
     }
     
-    const note=text.replace(/\d+/,"").replace(/\b(rupees|rs|pkr)\b/gi,"").replace(/[.,!?]/g,"").replace(/\s+/g," ").trim();
+    const note = normalized
+        .replace(/\d+/, "")
+        .replace(/\b(rupees|rs|pkr)\b/gi, "")
+        .replace(/روپے/g, "")
+        .replace(/[.,!?۔]/g, "")
+        .replace(/\s+/g, " ")
+        .trim();
     return{amount:amount, category:category,note:note};
 }
 
@@ -217,12 +281,13 @@ resetBtn.addEventListener("click",function(){
 
 if(!SpeechRecognition){
     micBtn.classList.add("hidden");
+    if(langSelect) langSelect.classList.add("hidden");
 }else{
     const recognition = new SpeechRecognition();
-    recognition.lang="en-US";
 
     micBtn.addEventListener("click",function(){
-        voiceStatus.textContent="Listening...";
+        recognition.lang=langSelect ? langSelect.value :"en-PK";
+        voiceStatus.textContent= recognition.land==="ur-PK" ? "سن رہا ہوں..." : "Listening...";
         recognition.start();
     });
 
