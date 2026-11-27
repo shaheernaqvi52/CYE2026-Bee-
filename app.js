@@ -27,6 +27,29 @@ demoBtn.addEventListener("click",function(){
     showDashboard(settings);
 });
 
+function parseExpense(text){
+    const lower=text.toLowerCase().replace(/,/g,"");
+    const match=lower.match(/\d+/);
+    const amount=match ? Number(match[0]):null;
+    const keywords={
+        Food:["lunch","dinner","breakfast","food","pizza","burger","chai","tea","coffee","snack","groceries"],
+        Transport:["uber","indrive","yango","rickshaw","bus","taxi","fuel","petrol","ride"]
+    };
+
+    let category="Other";
+    for (const cat in keywords){
+        const found=keywords[cat].some(function(word){
+            return lower.includes(word);
+        });
+        if (found){
+            category=cat;
+        }
+    }
+    
+    const note=text.replace(/\d+/,"").replace(/\b(rupees|rs|pkr)\b/gi,"").trim();
+    return{amount:amount, category:category,note:note};
+}
+
 function setPill(text,type){
     const pill=document.getElementById("status-pill");
     pill.textContent=text;
@@ -181,7 +204,13 @@ if(!SpeechRecognition){
 
     recognition.addEventListener("result",function(event){
         const transcript=event.results[0][0].transcript;
-        voiceStatus.textContent='Heard: "'+transcript+'"';
+        const parsed=parseExpense(transcript);
+        if (parsed.amount !==null){
+            document.getElementById("exp=amount").value=parsed.amount;
+        }
+        document.getElementById("exp-category").value=parsed.category;
+        document.getElementById("exp-note").value=parsed.note;
+        voiceStatus.textContent='Heard: "'+transcript+'". Check the fields and press Add.';
     });
     recognition.addEventListener("error",function(){
         voiceStatus.textContent="Couldn't hear that. Try again or type it.";
