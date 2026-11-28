@@ -196,18 +196,31 @@ function renderExpenses(){
 function renderPrediction(spent,left,settings){
         const box=document.getElementById("prediction");
 
-        if (spent===0){
-            box.textContent="Add an expense to see your prediction.";
-            setPill("Just getting started","good");
-            return;
-        }
+        if (spent === 0) {
+    box.innerHTML = `
+        <div class="prediction-empty">
+            <img src="images/budgie-peeking.png"
+                 alt="Budgie peeking"
+                 class="prediction-mascot">
+
+            <div>
+                <strong>No expenses yet!</strong>
+                <p>Add your first expense and I'll help you
+                keep track of your allowance.</p>
+            </div>
+        </div>
+    `;
+
+    setPill("Just getting started", "good");
+    return;
+}
         if (left===0){
-            box.textContent="You've used up your allowance for this allowance cycle.";
+            box.innerHTML = "<strong>You've used up your allowance</strong> for this allowance cycle.";
             setPill("Allowance used up","bad");
             return;
         }
         if(left<0){
-            box.textContent="You've gone PKR "+Math.abs(left) + " over your allowance this cycle.";
+            box.innerHTML = `You've gone <strong>PKR ${Math.abs(left)}</strong> over your allowance this cycle.`;
             setPill("Over Budget","bad")
             return;
         }
@@ -240,7 +253,7 @@ function renderPrediction(spent,left,settings){
             setPill("Running low","warn");
         
         }
-    }
+}
 
 expenseForm.addEventListener("submit",function(event){
     event.preventDefault();
