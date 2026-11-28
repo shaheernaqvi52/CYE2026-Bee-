@@ -214,7 +214,6 @@ function renderPrediction(spent,left,settings){
     setPill("Just getting started", "good");
     return;
 }
-        }
         if (left===0){
             box.innerHTML = "<strong>You've used up your allowance</strong> for this allowance cycle.";
             setPill("Allowance used up","bad");
@@ -254,6 +253,7 @@ function renderPrediction(spent,left,settings){
             setPill("Running low","warn");
         
         }
+}
 
 expenseForm.addEventListener("submit",function(event){
     event.preventDefault();
